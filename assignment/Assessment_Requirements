@@ -1,0 +1,48 @@
+Assessment Problems
+
+Follow the assessment instructions and guidance closely to ensure you solve the following problems correctly.
+
+Problem 1: Data from yfinance
+
+Using the yfinance Python package, 
+
+write a function called get_data() 
+Downloads all hourly data for the previous five days for the five FAANG stocks:
+
+    Facebook (META)
+    Apple (AAPL)
+    Amazon (AMZN)
+    Netflix (NFLX)
+    Google (GOOG)
+
+Save the data into a folder called data in the root of your repository
+Filename must use the format YYYYMMDD-HHmmss.csv 
+where YYYYMMDD is the four-digit year (e.g. 2025), followed by the two-digit month (e.g. 09 for September), followed by the two digit day, and HHmmss is hour, minutes, seconds. 
+Create the data folder if you don't already have one.
+
+Problem 2: Plotting Data
+
+Write a function called plot_data() 
+Plot_data() must acceess the latest data file in the data folder 
+on one plot, plots the Close prices for each of the five stocks. 
+
+The plot should include axis labels, a legend, and the date as a title. 
+Save the plot into a plots folder in the root of your repository using a filename in the format YYYYMMDD-HHmmss.png. 
+Create the plots folder if you don't already have one.
+
+Problem 3: Script
+
+Create a Python script called faang.py in the root of your repository. 
+Copy the above functions into it 
+Whenever someone at the terminal types ./faang.py, the script runs, downloading the data and creating the plot. 
+Note that this will require a shebang line and the script to be marked executable. 
+Explain the steps you took in your notebook.
+
+Problem 4: Automation
+
+Create a GitHub Actions workflow to run your script every Saturday morning. 
+The script should be called faang.yml in a .github/workflows/ folder in the root of your repository. 
+In your notebook, explain each of the individual lines in your workflow.
+
+
+End
