@@ -9,8 +9,8 @@
 
 # The shebang "#!" distinguish it from a standard comment. The "/usr/bin/env python" avoids hard-coding an absolute path to any specific Python interpreter. I'm not sure if my script is backward-compatible with Python 2, so I'm going to explicitly request python3.
 
-import yfinance
-print(f"The version of yfinance that you're running is: {yfinance.__version__}")
+import yfinance as yf
+#print(f"The version of yfinance that you're running is: {yf.__version__}")
 
 # Dates and times - we will use this package to allow us format dates into strings for filenames.
 import datetime as dt
@@ -24,10 +24,12 @@ import matplotlib.pyplot as plt
 # need numpy to create two arrays for chats
 import numpy as np
 
+
+import os
 # Yahoo Finance is not part of the cental python repository 
 # but is an open-source package available that can be installed via conda-forge.
 # This is where we import the yfinance package to allow us to download stock data.
-import yfinance as yf
+
 
 
 # There are known issues with yfinance and the default user-agent, so i need to spoof my user-agent
@@ -42,7 +44,7 @@ session = requests.Session(impersonate="chrome")
 # That is, it takes a single string with spaces between each ticker symbol.
 # So, our function looks like this, remember we are passing in our session object to avoid user-agent issues.
 tickers = yf.Tickers('META AAPL AMZN NFLX GOOG', session=session)
-print(tickers.tickers)  # This will print the ticker objects for each of our FANG stocks.
+#print(tickers.tickers)  # This will print the ticker objects for each of our FANG stocks.
 
 df = yf.download(['META', 'AAPL', 'AMZN', 'NFLX', 'GOOG'], period='5d', interval='1h', session=session)
 
@@ -85,7 +87,7 @@ print(now.strftime("%Y%m%d-%H%M%S"))
 "../data/" + now.strftime('%Y%m%d-%H%M%S')+'.csv'
 
 # print(df.to_csv("../data/" + now.strftime('%Y%m%d-%H%M%S')+'.csv'))
-print(df.to_csv("../data/" + dt.datetime.now().strftime('%Y%m%d-%H%M%S')+'.csv'))
+#print(df.to_csv("../data/" + dt.datetime.now().strftime('%Y%m%d-%H%M%S')+'.csv'))
 
 df.columns
 drop_cols_list = [(  'High', 'AAPL'),
@@ -110,34 +112,55 @@ drop_cols_list = [(  'High', 'AAPL'),
             ('Volume', 'NFLX')]
 df.drop(columns=drop_cols_list, inplace=True)
 headers = df.columns.tolist()
+
+#print(f"{df}\n")
+
 print(f"{headers}\n")
 
+#df = pd.DataFrame({'A': [1, 2], 'B': [3, 4], 'C': [5, 6]})
+#df.columns = ['Alpha', 'Beta', 'Gamma']
+new_column_names = ["Apple","Amazon","Google","Meta","Netflix"]
+df.columns = new_column_names
+
+#df = df.rename(columns={"('Close', 'AAPL')":"Apple","('Close', 'AMZN')":"Amazon","('Close', 'GOOG')":"Google","('Close', 'META')":"Meta","(Close, 'NFLX')":"Netflix" }, inplace=True)
+#new_cols = ["Apple", "Amazon", "Google", "Meta", "Netflix"]
+#df.columns = [new_cols]
+print(f"{df}\n")
+
+'''
 df.index
 # this tells us all the values for the x-axis, which is date and time stamps
 
-# Problem 2: Plotting Data
-'''
-df[('Close','META')].plot()
-#so this plot the closing price for MSFT for one month (October 2025)
-'''
-
-# Plotting the closing prices.
+# Problem 2: Plotting the closing prices.
 
 # We use numpy to create two arrays, one for our dates and the other for our mean daily temperatures
 x = np.array(df.index)
 y = np.array(df)
 
 plt.xlabel("Date")
-plt.ylabel("Stock Price")
-plt.title("Stock Prices of the Fang Stocks {now.strftime('%Y%m%d-%H%M%S')}")
+plt.ylabel("Stock Price (USD)")
+
+plt.legend(["Apple", "Amazon", "Google", "Meta", "Netflix"])
+
+title = "Stock Prices of the Fang Stocks" + str({now.strftime('%Y-%m-%d at %H:%M:%S')})
+plt.title(title)
 
 plt.plot(x,y)
 #plt.show()
 
-# # up one levels to root and then down into plots
-datadir = "../plots/"
-filename = datadir + "{now.strftime('%Y%m%d-%H%M%S')}_stock_prices_of_the_fangs_stocks.png"
-print(f"{datadir + filename}")
-#open(people_filename)
+# from Gemini AI, we use create a directory as follows
+directory_path = "../plots"
+try:
+    os.mkdir(directory_path)
+    print(f"Directory '{directory_path}' created successfully one level up.")
+except FileExistsError:
+    print(f"Directory '{directory_path}' already exists.")
+except OSError as e:
+    print(f"Error creating directory: {e}")
 
-plt.savefig(filename)
+# # up one levels to root and then down into plots
+filename = (directory_path) + "/" + now.strftime('%Y%m%d-%H%M%S') + "_stock_prices_of_the_fangs_stocks" + ".png"
+#print(f"{filename}")
+
+#plt.savefig(filename)
+'''
