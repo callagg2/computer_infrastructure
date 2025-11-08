@@ -20,6 +20,9 @@ import pandas as pd
 # plot graphs - we will use matplotlib to plot graphs.
 import matplotlib.pyplot as plt 
 
+# need numpy to create two arrays for chats
+import numpy as np
+
 # Yahoo Finance is not part of the cental python repository 
 # but is an open-source package available that can be installed via conda-forge.
 # This is where we import the yfinance package to allow us to download stock data.
@@ -41,7 +44,6 @@ tickers = yf.Tickers('META AAPL AMZN NFLX GOOG', session=session)
 print(tickers.tickers)  # This will print the ticker objects for each of our FANG stocks.
 
 df = yf.download(['META', 'AAPL', 'AMZN', 'NFLX', 'GOOG'], period='5d', interval='1h', session=session)
-
 
 #in the previous command, we had no comma between the stock tickers, 
 #but here, because they are in a tuple, we do, and each have apostrophes to indicate they are strings
@@ -85,12 +87,58 @@ print(now.strftime("%Y%m%d-%H%M%S"))
 print(df.to_csv("../data/" + dt.datetime.now().strftime('%Y%m%d-%H%M%S')+'.csv'))
 
 df.columns
+drop_cols_list = [(  'High', 'AAPL'),
+            (  'High', 'AMZN'),
+            (  'High', 'GOOG'),
+            (  'High', 'META'),
+            (  'High', 'NFLX'),
+            (   'Low', 'AAPL'),
+            (   'Low', 'AMZN'),
+            (   'Low', 'GOOG'),
+            (   'Low', 'META'),
+            (   'Low', 'NFLX'),
+            (  'Open', 'AAPL'),
+            (  'Open', 'AMZN'),
+            (  'Open', 'GOOG'),
+            (  'Open', 'META'),
+            (  'Open', 'NFLX'),
+            ('Volume', 'AAPL'),
+            ('Volume', 'AMZN'),
+            ('Volume', 'GOOG'),
+            ('Volume', 'META'),
+            ('Volume', 'NFLX')]
+df.drop(columns=drop_cols_list, inplace=True)
+headers = df.columns.tolist()
+print(f"{headers}\n")
 
 df.index
 # this tells us all the values for the x-axis, which is date and time stamps
 
 # Problem 2: Plotting Data
-
+'''
 df[('Close','META')].plot()
 #so this plot the closing price for MSFT for one month (October 2025)
- 
+'''
+
+# Plotting the closing prices.
+
+# We use numpy to create two arrays, one for our dates and the other for our mean daily temperatures
+x = np.array(df.index)
+y = np.array(df)
+
+plt.xlabel("Date")
+plt.ylabel("Stock Price")
+plt.title("Stock Prices of the Fang Stocks {now.strftime('%Y%m%d-%H%M%S')}")
+
+plt.plot(x,y)
+#plt.show()
+
+# # up one levels to root and then down into plots
+datadir = "../plots/"
+filename = datadir + "{now.strftime('%Y%m%d-%H%M%S')}_stock_prices_of_the_fangs_stocks.png"
+print(f"{datadir + filename}")
+#open(people_filename)
+
+plt.savefig(filename)
+
+
