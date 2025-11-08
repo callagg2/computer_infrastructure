@@ -1,3 +1,5 @@
+#!/usr/bin/env -S python3
+
 # Problems Notebook
 
 # Course: Computer Infrastructure
@@ -6,7 +8,6 @@
 # Problem 1: Data from yfinance
 
 # The shebang "#!" distinguish it from a standard comment. The "/usr/bin/env python" avoids hard-coding an absolute path to any specific Python interpreter. I'm not sure if my script is backward-compatible with Python 2, so I'm going to explicitly request python3.
-#!/usr/bin/env -S python3 -i
 
 import yfinance
 print(f"The version of yfinance that you're running is: {yfinance.__version__}")
@@ -140,5 +141,3 @@ print(f"{datadir + filename}")
 #open(people_filename)
 
 plt.savefig(filename)
-
-
