@@ -3,12 +3,10 @@
 # The "/usr/bin/env python" avoids hard-coding an absolute path to any specific Python interpreter. 
 # I'm not sure if my script is backward-compatible with Python 2, so I'm going to explicitly request python3.
 
-
 # Problems Notebook
 
 # Course: Computer Infrastructure
 # Author: Gerry Callaghan
-
 
 import yfinance as yf
 # Yahoo Finance is not part of the cental python repository 
@@ -42,67 +40,85 @@ import os
 import csv   # to read in csv files
 
 
-
-
 # Problem 1: Data from yfinance
 
+# I want to remove the apostrophe because the tickers command in yfinance do not have apostrophes
+# so we create a string of stock tickers separated by spaces
+portfolio = ['AAPL', 'AMZN','GOOG', 'META','NFLX']  # FANG stocks
+#print(f"{len(portfolio)}")
+stocks = portfolio[0]
+for stock in portfolio[1:]:
+        stocks += (" " + stock)
+#print(f"{stocks}\n")
 
 # From here URL= "https://ranaroussi.github.io/yfinance/", 
 # it says that for multiple tickers we need only have whitespace between each ticker symbol.
 # That is, it takes a single string with spaces between each ticker symbol.
 # So, our function looks like this, remember we are passing in our session object to avoid user-agent issues.
-tickers = yf.Tickers('META AAPL AMZN NFLX GOOG', session=session)
+tickers = yf.Tickers(stocks, session=session)
 #print(tickers.tickers)  # This will print the ticker objects for each of our FANG stocks.
+stock_names = str()
+i = 0
+while i < len(portfolio):
+        #displayName = tickers.tickers[portfolio[i]].info['longName']
+        stock_names = stock_names + (tickers.tickers[portfolio[i]].info['longName']+", ")
+        i+=1
+
 
 # We download the data from yahoo finance into a dataframe as follows
 # According to https://ranaroussi.github.io/yfinance/reference/api/yfinance.download.html
 # we specify a five day period (5d) at one hour intervals (1h) as follows
-df = yf.download(['META', 'AAPL', 'AMZN', 'NFLX', 'GOOG'], period='5d', interval='1h', session=session)
+df = yf.download(portfolio, period='5d', interval='1h', session=session)
+
+#df = yf.download(['META', 'AAPL', 'AMZN', 'NFLX', 'GOOG'], period='5d', interval='1h', session=session)
 # in the previous command, we had no comma between the stock tickers, 
 # but here in this download function, because they are in a tuple, we do need commas, 
 # and each have apostrophes to indicate they are strings
 # the function is download(),and we it takes variables, ticker/tickers and period
 
-
-
 # let's view our columns
-df.columns
+#print(f"{df.head()}\n")
 # many of these columns we don't need, so let's create a list of columns we want to drop
-drop_cols_list = [(  'High', 'AAPL'),
-            (  'High', 'AMZN'),
-            (  'High', 'GOOG'),
-            (  'High', 'META'),
-            (  'High', 'NFLX'),
-            (   'Low', 'AAPL'),
-            (   'Low', 'AMZN'),
-            (   'Low', 'GOOG'),
-            (   'Low', 'META'),
-            (   'Low', 'NFLX'),
-            (  'Open', 'AAPL'),
-            (  'Open', 'AMZN'),
-            (  'Open', 'GOOG'),
-            (  'Open', 'META'),
-            (  'Open', 'NFLX'),
-            ('Volume', 'AAPL'),
-            ('Volume', 'AMZN'),
-            ('Volume', 'GOOG'),
-            ('Volume', 'META'),
-            ('Volume', 'NFLX')]
+
+ # Instead of hardcoding the list of superfluous columns for our stocks, 
+ # # because the number of stocks might change
+ # let's create it programmatically where we pull in the stocks listed in our portfolio variable above     
+stock = portfolio[0]
+potential_drop_cols_list = ()
+i = 0
+
+while i < len(portfolio):
+        
+        column1 = ("High",portfolio[i])
+        column2= ("Low",portfolio[i])
+        column3=("Open",portfolio[i])
+        column4=("Volume",portfolio[i])
+        stock=(column1,column2,column3,column4)
+        potential_drop_cols_list = potential_drop_cols_list + stock
+        i+=1
+
+drop_cols_list = list(potential_drop_cols_list)
+print(f"{(drop_cols_list)}\n")
+
 # now let's drop this list of columns from our dataframe
 df.drop(columns=drop_cols_list, inplace=True)
 #let's view the new columns
-headers = df.columns.tolist()
-print(f"{headers}\n")
+#headers = df.columns.tolist()
+#print(f"{headers}\n")
 
 # All our prices are closing prices, so let's drop the "closing" prefix from each of our column names
 # We create new column names as follows
-new_column_names = ["Apple","Amazon","Google","Meta","Netflix"]
+
+new_stock_names = ["Apple","Amazon","Google","Meta","Netflix"]
+print(f"({new_stock_names})\n")
 # now set the column names of our dataframe equal to those column names
-df.columns = new_column_names
+df.columns = new_stock_names
 
-
+headers = df.columns.tolist()
+print(f"{headers}\n")
 
 #print(f"{df}\n")
+
 
 # Let's now print our dataframe out to a CSV file
 # we will use the to_csv funtion, you can read about it here https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_csv.html
@@ -193,4 +209,6 @@ except OSError as e:
 filename = (directory_path) + "/" + now.strftime('%Y%m%d-%H%M%S') + "_stock_prices_of_the_fangs_stocks" + ".png"
 #print(f"{filename}")
 
-plt.savefig(filename)
+#plt.savefig(filename)
+
+
