@@ -1,0 +1,58 @@
+
+# I used Google Gemini to give me a script based on the following prompt
+# I need to write a Github Actions script in YAML. I want it to:
+# 1. Clone my repository
+# 2. Run a script called faang.py every Saturday at 11.15am.
+# 3. Commit all changes to the repo.
+# 4. Push those changes back to Github.com.
+
+name: Run FAANG Script
+
+on:
+  # Schedule: 11:15 AM every Saturday using CRON where there are 5 values,
+  # the first value signifies the minute, the second value the hour, the third the day of the month, the fourth is the month, and the fifth is the weekday
+  schedule:
+    - cron: '15 11 * * 6'
+  # Allows you to run this manually from the Actions tab for testing
+  workflow_dispatch:
+
+# Grant the workflow permission to write back to the repo
+permissions:
+  contents: write
+
+jobs:
+  run-script:
+    # the job will run on (Ubunut) Linux in the cloud, 
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Clone the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Setup Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11' # Adjust this to match your local version
+
+      # Optional: Install dependencies such as pip if you have a requirements.txt so it can install any external packages needed
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      # 3. Run the script faang.py, note that I have a shebang in my faang.py, so i don't need to say python, ./ will suffice
+      - name: Run faang.py
+        run: ./assignment/faang.py
+
+      # 4. Commit and Push changes
+      - name: Commit and Push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          # The part below commits changes, but returns "success" even if 
+          # there are no changes to avoid failing the workflow.
+          git commit -m "Automated update via faang.py" || echo "No changes to commit"
+          git push
