@@ -79,7 +79,7 @@ def get_data():
 
     FILENAME = now.strftime('%Y%m%d-%H%M%S')+'.csv'
     # we want to put the csv in a separate folder in the parent directory
-    DATADIR = "../data/"
+    DATADIR = "data/"
     # the directory and filename concatenated is then the fullpath
     FULLPATH = DATADIR + FILENAME  
     # now to print out to this csv
@@ -97,7 +97,7 @@ def plot_data():
     
     # For convenience, I want to asign a variable the path and filename so i can reference it below
     # The folder containing the csv files is ../data/
-    DATADIR = "../data/"
+    DATADIR = "data/"
 
     # listing files in the data folder
     data_files = os.listdir(DATADIR)
@@ -155,7 +155,7 @@ def plot_data():
 
     # The two dots .. mean go up one level from the current directory
     # and then the forward slash / means go down into the plots directory
-    directory_path = "../plots"
+    directory_path = "plots"
 
     # from Gemini AI, I will create the directory if it doesn't exist
     try:
