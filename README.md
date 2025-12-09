@@ -20,37 +20,32 @@ It contains two primary implementations: an interactive **Jupyter Notebook** for
 * **CI/CD Integration:** Demonstrates how to run data science scripts in the cloud using GitHub Actions runners.
 * **Artifact Management:** The GitHub Action is configured to save the generated plots as downloadable artifacts.
 
-## 🛠️ Installation & Local Usage
+## Installation & Local Usage
 
-To run this project on your local machine, follow these steps:
+To run this project on your local machine, follow these steps (using bash):
 
 ### 1. Clone the repository
-```bash
 git clone [https://github.com/callagg2/computer_infrastructure.git](https://github.com/callagg2/computer_infrastructure.git)
 cd your-repo-name
 
 ### 2. Set up a virtual environment (Optional but recommended)
-```bash
 python -m venv venv
 source venv/bin/activate  # On Windows use `venv\Scripts\activate`
 
 ### 3. Install dependencies
-```bash
 pip install -r requirements.txt
 
 ### 4. Run the code
-```bash
-To use the script
+* To use the script: 
 python faang.py
 
-To use the notebook
-jupyter notebook aproblems.ipynb
-
+* To use the notebook:
+jupyter notebook problems.ipynb
 
 ## GitHub Actions Automation
-
 This repository includes a GitHub Actions workflow that automatically runs the python script.
 
-* ** Trigger: The action triggers on [e.g., specific time via cron, or on push to main].
-* ** Process: It sets up a Python environment, installs dependencies, executes the script, and saves the resulting graph.
-* ** Output: You can view the generated plots in the Actions tab under the "Artifacts" section of the latest build.
+* ** Trigger:** The action triggers on [e.g., specific time via cron, or on push to main].
+* ** Process:** It sets up a Python environment, installs dependencies, executes the script, and saves the resulting graph.
+* ** Output:** You can view the generated plots in the Actions tab under the "Artifacts" section of the latest build.
+
