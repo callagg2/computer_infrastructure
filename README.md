@@ -26,7 +26,7 @@ To run this project on your local machine, follow these steps (using bash):
 
 ### 1. Clone the repository
 git clone [https://github.com/callagg2/computer_infrastructure.git](https://github.com/callagg2/computer_infrastructure.git)
-cd your-repo-name
+cd computer_infrastructure
 
 ### 2. Set up a virtual environment (Optional but recommended)
 python -m venv venv
@@ -45,7 +45,7 @@ jupyter notebook problems.ipynb
 ## GitHub Actions Automation
 This repository includes a GitHub Actions workflow that automatically runs the python script.
 
-* ** Trigger:** The action triggers on [e.g., specific time via cron, or on push to main].
-* ** Process:** It sets up a Python environment, installs dependencies, executes the script, and saves the resulting graph.
-* ** Output:** You can view the generated plots in the Actions tab under the "Artifacts" section of the latest build.
+* Trigger: The action triggers on [e.g., specific time via cron, or on push to main].
+* Process: It sets up a Python environment, installs dependencies, executes the script, and saves the resulting graph.
+* Output: You can view the generated plots in the Actions tab under the "Artifacts" section of the latest build.
 
